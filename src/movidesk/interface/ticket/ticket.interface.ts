@@ -1,6 +1,73 @@
+export interface Ticket {
+    id: string;
+    protocol?: any;
+    type?: number;
+    subject: string;
+    category: string;
+    urgency?: any;
+    status: string;
+    baseStatus: string;
+    justification?: string;
+    origin?: number;
+    createdDate: Date;
+    isDeleted?: boolean;
+    originEmailAccount?: any;
+    owner: Ticket.Owner;
+    ownerTeam?: string;
+    createdBy?: Ticket.CreatedBy;
+    serviceFull?: string[];
+    serviceFirstLevelId?: number;
+    serviceFirstLevel?: string;
+    serviceSecondLevel?: string;
+    serviceThirdLevel?: any;
+    contactForm?: any;
+    tags?: string[];
+    cc?: string;
+    resolvedIn?: any;
+    closedIn?: any;
+    canceledIn?: any;
+    actionCount?: number;
+    lifeTimeWorkingTime?: any;
+    stoppedTime?: any;
+    stoppedTimeWorkingTime?: any;
+    resolvedInFirstCall?: boolean;
+    chatWidget?: any;
+    chatGroup?: any;
+    chatTalkTime?: any;
+    chatWaitingTime?: any;
+    sequence?: any;
+    slaAgreement?: any;
+    slaAgreementRule?: any;
+    slaSolutionTime?: number;
+    slaResponseTime?: number;
+    slaSolutionChangedByUser?: boolean;
+    slaSolutionChangedBy?: Ticket.SlaSolutionChangedBy;
+    slaSolutionDate?: any;
+    slaSolutionDateIsPaused?: boolean;
+    jiraIssueKey?: any;
+    redmineIssueId?: any;
+    movideskTicketNumber?: any;
+    linkedToIntegratedTicketNumber?: any;
+    reopenedIn?: any;
+    lastActionDate?: Date;
+    lastUpdate?: Date;
+    slaResponseDate?: any;
+    slaRealResponseDate?: any;
+    clients: Ticket.Client[];
+    actions?: Ticket.Action[];
+    parentTickets?: any[];
+    childrenTickets?: any[];
+    ownerHistories?: Ticket.OwnerHistory[];
+    statusHistories?: Ticket.StatusHistory[];
+    satisfactionSurveyResponses?: any[];
+    customFieldValues: Ticket.CustomFieldValue[];
+    assets?: any[];
+    webhookEvents?: any;
+}
+
 module Ticket {
 
-    interface CreatedBy {
+    export interface CreatedBy {
         id: string;
         personType: number;
         profileType: number;
@@ -9,7 +76,7 @@ module Ticket {
         phone: string;
     }
 
-    interface SlaSolutionChangedBy {
+    export interface SlaSolutionChangedBy {
         id: string;
         personType: number;
         profileType: number;
@@ -18,7 +85,7 @@ module Ticket {
         phone: string;
     }
 
-    interface Organization {
+    export interface Organization {
         id: string;
         personType: number;
         profileType: number;
@@ -27,7 +94,7 @@ module Ticket {
         phone?: string;
     }
 
-    interface Client {
+    export interface Client {
         id: string;
         personType: number;
         profileType: number;
@@ -45,14 +112,14 @@ module Ticket {
         reference?: string;
     }
 
-    interface Attachment {
+    export interface Attachment {
         fileName: string;
         path: string;
         createdBy: CreatedBy;
         createdDate: Date;
     }
 
-    interface Action {
+    export interface Action {
         id: number;
         type: number;
         origin: number;
@@ -69,7 +136,7 @@ module Ticket {
         tags: string[];
     }
 
-    interface Owner {
+    export interface Owner {
         id: string;
         personType: number;
         profileType: number;
@@ -78,7 +145,7 @@ module Ticket {
         phone: string;
     }
 
-    interface ChangedBy {
+    export interface ChangedBy {
         id: string;
         personType: number;
         profileType: number;
@@ -87,7 +154,7 @@ module Ticket {
         phone: string;
     }
 
-    interface OwnerHistory {
+    export interface OwnerHistory {
         ownerTeam: string;
         owner: Owner;
         changedBy: ChangedBy;
@@ -96,7 +163,7 @@ module Ticket {
         permanencyTimeWorkingTime?: number;
     }
 
-    interface StatusHistory {
+    export interface StatusHistory {
         status: string;
         justification: string;
         changedBy: ChangedBy;
@@ -105,7 +172,7 @@ module Ticket {
         permanencyTimeWorkingTime?: number;
     }
 
-    interface Item {
+    export interface Item {
         personId?: any;
         clientId?: any;
         team?: any;
@@ -114,79 +181,13 @@ module Ticket {
         fileName?: any;
     }
 
-    interface CustomFieldValue {
+    export interface CustomFieldValue {
         customFieldId: number;
         customFieldRuleId: number;
         line: number;
         value: string;
         items: Item[];
     }
-
-    export interface ticketData {
-        id: string;
-        protocol?: any;
-        type: number;
-        subject: string;
-        category: string;
-        urgency?: any;
-        status: string;
-        baseStatus: string;
-        justification: string;
-        origin: number;
-        createdDate: Date;
-        isDeleted: boolean;
-        originEmailAccount?: any;
-        owner: Owner;
-        ownerTeam: string;
-        createdBy: CreatedBy;
-        serviceFull: string[];
-        serviceFirstLevelId?: number;
-        serviceFirstLevel?: string;
-        serviceSecondLevel?: string;
-        serviceThirdLevel?: any;
-        contactForm?: any;
-        tags?: string[];
-        cc?: string;
-        resolvedIn?: any;
-        closedIn?: any;
-        canceledIn?: any;
-        actionCount?: number;
-        lifeTimeWorkingTime?: any;
-        stoppedTime?: any;
-        stoppedTimeWorkingTime?: any;
-        resolvedInFirstCall?: boolean;
-        chatWidget?: any;
-        chatGroup?: any;
-        chatTalkTime?: any;
-        chatWaitingTime?: any;
-        sequence?: any;
-        slaAgreement?: any;
-        slaAgreementRule?: any;
-        slaSolutionTime?: number;
-        slaResponseTime?: number;
-        slaSolutionChangedByUser?: boolean;
-        slaSolutionChangedBy?: SlaSolutionChangedBy;
-        slaSolutionDate?: any;
-        slaSolutionDateIsPaused?: boolean;
-        jiraIssueKey?: any;
-        redmineIssueId?: any;
-        movideskTicketNumber?: any;
-        linkedToIntegratedTicketNumber?: any;
-        reopenedIn?: any;
-        lastActionDate?: Date;
-        lastUpdate?: Date;
-        slaResponseDate?: any;
-        slaRealResponseDate?: any;
-        clients: Client[];
-        actions: Action[];
-        parentTickets?: any[];
-        childrenTickets?: any[];
-        ownerHistories?: OwnerHistory[];
-        statusHistories?: StatusHistory[];
-        satisfactionSurveyResponses?: any[];
-        customFieldValues: CustomFieldValue[];
-        assets?: any[];
-        webhookEvents?: any;
-    }
-
 }
+
+
