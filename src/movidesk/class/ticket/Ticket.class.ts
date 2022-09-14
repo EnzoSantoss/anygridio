@@ -1,4 +1,5 @@
 import * as I from "../../interface/index";
+import { _fields2Find } from "./defalutFields";
 
 export class Ticket {
   constructor(
@@ -9,35 +10,70 @@ export class Ticket {
     public fields: I.Fields = {}
   ) {}
 
-  public withFields(fieldsToFind: I.FieldsToFind[]) {
-    this.customFieldValues.forEach((customField) => {
-      fieldsToFind.forEach((field) => {
-        if (customField.customFieldId == field.id) {
-          if (customField?.value != null) {
-            this.fields = {
-              ...this.fields,
-              ...{ [field.value]: customField.value },
-            };
-          } else if (customField?.items[0]?.customFieldItem) {
-            this.fields = {
-              ...this.fields,
-              ...{ [field.value]: customField.items[0].customFieldItem },
-            };
-          } else if (customField?.items[0]?.storageFileGuid) {
-            this.fields = {
-              ...this.fields,
-              ...{ [field.value]: customField.items[0].storageFileGuid },
-            };
-          } else {
-            this.fields = {
-              ...this.fields,
-              ...{ [field.value]: "" },
-            };
+  public withFields(fieldsToFind: any) {
+    if (fieldsToFind === "default") {
+      //match(_fields2Find.invoice.create("dg"))
+
+      this.customFieldValues.forEach((customField: any) => {
+        _fields2Find.invoice.create("dg").forEach((field: any) => {
+          if (customField.customFieldId == field.id) {
+            if (customField?.value != null) {
+              this.fields = {
+                ...this.fields,
+                ...{ [field.value]: customField.value },
+              };
+            } else if (customField?.items[0]?.customFieldItem) {
+              this.fields = {
+                ...this.fields,
+                ...{ [field.value]: customField.items[0].customFieldItem },
+              };
+            } else if (customField?.items[0]?.storageFileGuid) {
+              this.fields = {
+                ...this.fields,
+                ...{ [field.value]: customField.items[0].storageFileGuid },
+              };
+            } else {
+              this.fields = {
+                ...this.fields,
+                ...{ [field.value]: "" },
+              };
+            }
           }
-        }
+        });
       });
-    });
-    return this;
+      return this;
+
+      //end of if
+    } else {
+      this.customFieldValues.forEach((customField: any) => {
+        fieldsToFind.forEach((field: any) => {
+          if (customField.customFieldId == field.id) {
+            if (customField?.value != null) {
+              this.fields = {
+                ...this.fields,
+                ...{ [field.value]: customField.value },
+              };
+            } else if (customField?.items[0]?.customFieldItem) {
+              this.fields = {
+                ...this.fields,
+                ...{ [field.value]: customField.items[0].customFieldItem },
+              };
+            } else if (customField?.items[0]?.storageFileGuid) {
+              this.fields = {
+                ...this.fields,
+                ...{ [field.value]: customField.items[0].storageFileGuid },
+              };
+            } else {
+              this.fields = {
+                ...this.fields,
+                ...{ [field.value]: "" },
+              };
+            }
+          }
+        });
+      });
+      return this;
+    }
   }
 
   public getProcedure(ticketStatus: I.Ticket["status"]) {
@@ -50,3 +86,36 @@ export class Ticket {
     }
   }
 }
+
+// match(fieldsToFind){
+
+//   this.customFieldValues.forEach((customField:any) => {
+//     fieldsToFind.invoice.create("dg").forEach((field: any) => {
+//       if (customField.customFieldId == field.id) {
+//         if (customField?.value != null) {
+//           this.fields = {
+//             ...this.fields,
+//             ...{ [field.value]: customField.value },
+//           };
+//         } else if (customField?.items[0]?.customFieldItem) {
+//           this.fields = {
+//             ...this.fields,
+//             ...{ [field.value]: customField.items[0].customFieldItem },
+//           };
+//         } else if (customField?.items[0]?.storageFileGuid) {
+//           this.fields = {
+//             ...this.fields,
+//             ...{ [field.value]: customField.items[0].storageFileGuid },
+//           };
+//         } else {
+//           this.fields = {
+//             ...this.fields,
+//             ...{ [field.value]: "" },
+//           };
+//         }
+//       }
+//     });
+//   });
+//   return this;
+
+// }
