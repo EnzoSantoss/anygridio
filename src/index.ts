@@ -6,8 +6,9 @@ import { ticket } from "./movidesk/modules";
 
 const create = async () => {
   const testetck = await ticket(37856, "80c1fb64-3e4a-48c9-b105-160958e7f5c5");
-  //testetck.getProcedure(testetck.status);
+  testetck.getProcedure(testetck.status);
   testetck.withFields("default");
+  const invoice = testetck.getInvoice(testetck.status, "dg", testetck.fields);
 };
 
 create();
