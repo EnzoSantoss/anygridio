@@ -3,8 +3,7 @@
 // export * from './nfe/index';
 
 import { ticket } from "./movidesk/modules";
-
-//export { ticket } from "./movidesk/modules";
+export { ticket } from "./movidesk/modules";
 
 //import * as ticket from "./movidesk/index"
 
