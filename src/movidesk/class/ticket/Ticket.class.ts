@@ -13,7 +13,8 @@ export class Ticket {
   public withFields(fieldsToFind: any) {
     if (fieldsToFind === "default") {
       //console.log(defaultFields.createInvoice.defaultFields);
-      this.match(defaultFields.createInvoice.defaultFields);
+
+      return this.match(defaultFields.createInvoice.defaultFields);
     } else {
       this.match(fieldsToFind);
     }
