@@ -1,1 +1,1 @@
-export { default as ticket } from "./ticket/ticket.module";
+export { default as Ticket } from "./ticket/ticket.module";

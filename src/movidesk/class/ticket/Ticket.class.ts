@@ -7,7 +7,8 @@ export class Ticket {
     public readonly status: I.Ticket["status"],
     public readonly category: I.Ticket["category"],
     public readonly customFieldValues: I.Ticket["customFieldValues"],
-    public fields: I.Fields = {}
+    public fields: I.Fields = {},
+    public procedure: string | null = null
   ) {}
 
   public withFields(fieldsToFind: I.FieldsToFind[] | string) {
@@ -26,44 +27,47 @@ export class Ticket {
     }
   }
 
-  public getProcedure(ticketStatus: I.Ticket["status"]) {
-    if (ticketStatus.startsWith("S")) {
-      if (ticketStatus.split(".").includes("ND")) {
-        return "nd";
+  public getProcedure() {
+    if (this.status.startsWith("S")) {
+      if (this.status.split(".").includes("ND")) {
+        this.procedure = "nd";
+        return this;
       } else {
-        return "dg";
+        this.procedure = "dg";
+        return this;
       }
     }
   }
 
-  public getInvoice(ticketStatus: string, procedure: string, fields: any) {
+  public getInvoice() {
     let invoice = {
       product: {},
       sell: {},
       service: {},
     };
 
-    if (procedure == "dg") {
+    if (this.procedure == "dg") {
       const should = {
         createOngoingInvoice:
-          ticketStatus.slice(2, 4) == ".1" &&
-          !fields.idOngoingInvoice &&
-          !fields.urlOngoingInvoice,
+          this.status.slice(2, 4) == ".1" &&
+          !this.fields.idOngoingInvoice &&
+          !this.fields.urlOngoingInvoice,
         createOutgoingInvoice:
-          ticketStatus.slice(2, 4) == ".2" &&
-          !fields.idOngoingInvoice &&
-          !fields.urlOngoingInvoice,
+          this.status.slice(2, 4) == ".2" &&
+          !this.fields.idOngoingInvoice &&
+          !this.fields.urlOngoingInvoice,
         retrieveOngoingInvoice:
-          fields.idOngoingInvoice?.length > 0 &&
-          !(fields.urlOngoingInvoice.length > 0),
+          this.fields.idOngoingInvoice?.length > 0 &&
+          !(this.fields.urlOngoingInvoice.length > 0),
         retrieveOutgoingInvoice:
-          fields.idOutgoingInvoice?.length > 0 &&
-          !(fields.urlOutgoingInvoice.length > 0),
+          this.fields.idOutgoingInvoice?.length > 0 &&
+          !(this.fields.urlOutgoingInvoice.length > 0),
       };
 
       const is = {
-        ongoingInvoiceCancelled: fields.infoOngoingInvoice == "CANCELADA",
-        outgoingInvoiceCancelled: fields?.infoOutgoingInvoice == "CANCELADA",
+        ongoingInvoiceCancelled: this.fields.infoOngoingInvoice == "CANCELADA",
+        outgoingInvoiceCancelled:
+          this.fields?.infoOutgoingInvoice == "CANCELADA",
       };
 
       invoice.product = {
