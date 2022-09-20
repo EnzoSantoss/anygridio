@@ -10,11 +10,17 @@ export class Ticket {
     public fields: I.Fields = {}
   ) {}
 
-  public withFields(fieldsToFind: I.FieldsToFind | string) {
+  public withFields(fieldsToFind: I.FieldsToFind[] | string) {
     if (fieldsToFind === "default") {
       //console.log(defaultFields.createInvoice.defaultFields);
 
       return this.match(defaultFields.createInvoice.defaultFields);
+    }
+    if (fieldsToFind === "CPF") {
+      return this.match(defaultFields.createInvoice.buyerTypeFields.CPF);
+    }
+    if (fieldsToFind === "PJ") {
+      return this.match(defaultFields.createInvoice.buyerTypeFields.PJ);
     } else {
       return this.match(fieldsToFind);
     }
