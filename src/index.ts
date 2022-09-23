@@ -1,35 +1,18 @@
+//Arquivo responsavel por exportar todas as funções para "fora" do package, ou seja, funções que serão executadas quando alguem baixar essa dependencia
+
 // export * from './braspress/index';
 //export * from "./movidesk/index";
 // export * from './nfe/index';
 
-import { Ticket } from "./movidesk/modules";
-export { Ticket } from "./movidesk/modules";
-
-//import * as ticket from "./movidesk/index"
+import { Ticket, Tickets } from "./movidesk/modules"; // Testando as funções localmente via npm run dev
+export { Ticket } from "./movidesk/modules"; // exportando as funcionalidades do package
 
 const create = async () => {
-  //   const teste = (
-  //     await ticket(37856, "80c1fb64-3e4a-48c9-b105-160958e7f5c5")
-  //   ).withFields("default");
+  //const ticket_ = await ticket(37856, "80c1fb64-3e4a-48c9-b105-160958e7f5c5");
 
-  const ticket = await Ticket(37856, "80c1fb64-3e4a-48c9-b105-160958e7f5c5");
+  //ticket_.withFields("default").getProcedure()?.getInvoice();
 
-  ticket.withFields("default").getProcedure()?.getInvoice();
-
-  //const testeinvoice = teste.getInvoice(teste.status, teste.procedure, teste.fields);
-
-  //   teste.withFields([
-  //     { id: 102777, value: "buyerName" },
-  //     { id: 104205, value: "buyerICMS" },
-  //     { id: 102929, value: "buyerStateTaxNumber" },
-  //   ]);
+  const teste = await Tickets("teste");
 };
 
 create();
-
-// console.log("Testing Build");
-//console.log("teste");
-
-//   teste.getProcedure(teste.status);
-//   teste.withFields("default");
-//   const testeinvoice = teste.getInvoice(teste.status, "dg", teste.fields);

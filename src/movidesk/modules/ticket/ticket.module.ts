@@ -1,21 +1,7 @@
+//Arquivo responsavel por criar todos os recursos do package Anygridio relacionados aos tickets
 import { Ticket } from "../../class/ticket/Ticket.class";
 import * as I from "../../interface/index";
 import axios from "axios";
-
-// export default async function ticket(id: number, token: string) {
-//   try {
-//     const uri: string = `https://api.movidesk.com/public/v1/tickets`;
-//     // const query: string = `token=${token}&id=${id}`;
-//     const query: string = `token=${token}&id=${id}`;
-//     const url: string = `${uri}?${query}`;
-//     const response: any = await axios.get(url);
-//     const t: I.Ticket = response.data;
-//     const ticket = new Ticket(t.id, t.status, t.category, t.customFieldValues);
-//     return ticket;
-//   } catch (e: any) {
-//     throw new Error(e);
-//   }
-// }
 
 const buildClassTicket = async (id: number, token: string) => {
   try {
@@ -32,26 +18,72 @@ const buildClassTicket = async (id: number, token: string) => {
   }
 };
 
-export default async function ticket(id: number, token: string) {
+export async function ticket(id: number, token: string) {
   let tkt = await buildClassTicket(id, token);
 
   return tkt;
+}
 
-  // let tktPromise = new Promise((resolve, reject) => {
-  //   //let newTktk = buildClassTicket(id, token);
-  //   if (tkt) {
-  //     resolve(tkt);
-  //   } else {
-  //     reject("Failed");
+export async function Tickets(token: string) {
+  const uri: string = `https://api.movidesk.com/public/v1/tickets`;
+
+  const token_ = "80c1fb64-3e4a-48c9-b105-160958e7f5c5";
+
+  const statusList: string[] = [
+    "S1.0 - SEPARAÇÃO ESTOQUE",
+    "S4 - COLETA REVERSA",
+    "S5.0 - ENTRADA ESTOQUE",
+  ];
+
+  const testeUri = `https://api.movidesk.com/public/v1/tickets?token=80c1fb64-3e4a-48c9-b105-160958e7f5c5&$select=id&$filter=status eq 'S4 - COLETA REVERSA' &$expand=customFieldValues($filter=customFieldId eq 92408;$select=value)`;
+
+  statusList.forEach(async (status: string) => {
+    const uri = `https://api.movidesk.com/public/v1/tickets?token=80c1fb64-3e4a-48c9-b105-160958e7f5c5&$select=id&$filter=status eq '${status}' &$expand=customFieldValues($filter=customFieldId eq 92408;$select=value)`;
+
+    const response = await axios.get(uri);
+    const data = response.data;
+
+    const dataFiltered = data.filter((value: any) => {
+      const snToBeFound = "PKE4A40067";
+
+      const [serialNumbers] = value.customFieldValues;
+
+      //console.log(serialNumbers.value);
+
+      if (snToBeFound === serialNumbers.value) {
+        return value;
+      }
+    });
+
+    dataFiltered[0] ? console.log(dataFiltered[0]) : false;
+
+    //console.log(dataFiltered[0]);
+  });
+
+  //&$expand=customFieldValues($filter=customFieldId eq 92408;$select=value)
+
+  // const response = await axios.get(testeUri);
+
+  // const data = response.data;
+
+  // const allSerialNumbers = data.filter((value: any) => {
+  //   const [valueTeste] = value?.customFieldValues;
+  //   console.log(value);
+
+  //   if (valueTeste?.value === "DRH3B1407V") {
+  //     console.log(value);
+  //     return { value };
   //   }
-  // });
 
-  // return tktPromise
-  //   .then((t) => {
-  //     return t;
-  //   })
-  //   .catch((message) => {
-  //     return message;
-  //   });
-  // let tkt = Promise.resolve()
+  // return value.customFieldValues.length
+
+  // valueTeste.value === "DXH6BK31S1"
+  //   ? console.log(
+  //       "Esse é o valor que voce esta procurando: --> " +
+  //         valueTeste.value +
+  //         "Com o id -->" +
+  //         value.id
+  //     )
+  //   : console.log(valueTeste);
+  //});
 }
