@@ -9,10 +9,10 @@ export { Ticket } from "./movidesk/modules"; // exportando as funcionalidades do
 
 const create = async () => {
   //const ticket_ = await ticket(37856, "80c1fb64-3e4a-48c9-b105-160958e7f5c5");
-
   //ticket_.withFields("default").getProcedure()?.getInvoice();
-
-  const teste = await Tickets("teste");
+  // const teste = await Tickets({
+  //   expand :
+  // });
 };
 
 create();

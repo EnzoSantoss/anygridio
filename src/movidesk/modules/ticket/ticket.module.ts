@@ -35,6 +35,15 @@ export async function Tickets(token: string) {
     "S5.0 - ENTRADA ESTOQUE",
   ];
 
+  //MODELOS DE URI
+
+  // https://api.movidesk.com/public/v1/tickets?token=80c1fb64-3e4a-48c9-b105-160958e7f5c5&$select=id,customFieldValues,createdDate,status&$orderby=id desc&$filter=status ne ' ' and status ne 'Resolvido' and createdDate gt 2022-09-05&$expand=customFieldValues($filter=customFieldId eq 92408;$select=value;$filter=value eq 'DWH6BK604J')&$top=1
+
+  //RETORNANDO TODOS OS OS OBJT POREM APENAS MOSTRA O CUSTOMFIELDSVALUES DO SN DESEJADO
+  //https://api.movidesk.com/public/v1/tickets?token=80c1fb64-3e4a-48c9-b105-160958e7f5c5&$select=id,customFieldValues,createdDate,status&$orderby=id desc&$filter=status ne ' '&$expand=customFieldValues($filter=customFieldId eq 92408;$select=value;$filter=value eq 'ZOD5BMA0BH')
+
+  //https://api.movidesk.com/public/v1/tickets?token=80c1fb64-3e4a-48c9-b105-160958e7f5c5&$select=id,customFieldValues,createdDate,status&$orderby=id desc&$expand=customFieldValues($filter=customFieldId eq 92408;$select=value;$filter=value eq 'ZOD5BMA0BH')&$filter=status ne ' '
+
   const testeUri = `https://api.movidesk.com/public/v1/tickets?token=80c1fb64-3e4a-48c9-b105-160958e7f5c5&$select=id&$filter=status eq 'S4 - COLETA REVERSA' &$expand=customFieldValues($filter=customFieldId eq 92408;$select=value)`;
 
   statusList.forEach(async (status: string) => {
@@ -59,31 +68,4 @@ export async function Tickets(token: string) {
 
     //console.log(dataFiltered[0]);
   });
-
-  //&$expand=customFieldValues($filter=customFieldId eq 92408;$select=value)
-
-  // const response = await axios.get(testeUri);
-
-  // const data = response.data;
-
-  // const allSerialNumbers = data.filter((value: any) => {
-  //   const [valueTeste] = value?.customFieldValues;
-  //   console.log(value);
-
-  //   if (valueTeste?.value === "DRH3B1407V") {
-  //     console.log(value);
-  //     return { value };
-  //   }
-
-  // return value.customFieldValues.length
-
-  // valueTeste.value === "DXH6BK31S1"
-  //   ? console.log(
-  //       "Esse é o valor que voce esta procurando: --> " +
-  //         valueTeste.value +
-  //         "Com o id -->" +
-  //         value.id
-  //     )
-  //   : console.log(valueTeste);
-  //});
 }
