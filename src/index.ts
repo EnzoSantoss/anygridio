@@ -13,6 +13,13 @@ const create = async () => {
   // const teste = await Tickets({
   //   expand :
   // });
+
+  const serialNumber = await Tickets(
+    { customFieldId: 92408, serialNumber: "XZJ1BK300P" },
+    "80c1fb64-3e4a-48c9-b105-160958e7f5c5"
+  );
+
+  console.log(serialNumber);
 };
 
 create();
