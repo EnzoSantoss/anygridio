@@ -24,19 +24,23 @@ export async function ticket(id: number, token: string) {
   return tkt;
 }
 
-export async function Tickets(
-  { customFieldId: id, serialNumber: sn }: any,
-  token: string
-) {
+export async function Tickets(info: I.Tickets, token: string) {
   const uri: string = `https://api.movidesk.com/public/v1/tickets`;
 
-  const query: string = `token=${token}&$select=id,status,createdDate&$expand=customFieldValues($filter=customFieldId eq ${id};$select=value,customFieldId)&$filter=customFieldValues/any(c: c/value eq '${sn}')`;
+  const query: string = `token=${token}&$select=id,status,createdDate&$expand=customFieldValues($filter=customFieldId eq ${info.customFieldId};$select=value,customFieldId)&$filter=customFieldValues/any(c: c/value eq '${info.serialNumber}')`;
 
   const url = `${uri}?${query}`;
 
   const response: any = await axios.get(url);
 
-  const [data]: any = response.data;
+  // const [data]: {
+  //   createdDate: string;
+  //   status: string;
+  //   id: number;
+  //   customFieldValues: any[];
+  // }[] = response.data;
+
+  const [data]: I.TicketsData[] = response.data;
 
   return data;
 
