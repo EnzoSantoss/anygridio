@@ -40,7 +40,7 @@ export async function Tickets(info: I.Tickets, token: string) {
   //   customFieldValues: any[];
   // }[] = response.data;
 
-  const [data]: I.TicketsData[] = response.data;
+  const data: I.TicketsData[] = response.data;
 
   return data;
 
