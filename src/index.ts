@@ -8,7 +8,7 @@ import { Ticket, Tickets } from "./movidesk/index"; // Testando as funções loc
 export { Ticket, Tickets } from "./movidesk/index"; // exportando as funcionalidades do package
 
 const create = async () => {
-  // const ticket_ = await Ticket(36500, "80c1fb64-3e4a-48c9-b105-160958e7f5c5");
+  //const ticket_ = await Ticket(36500, "80c1fb64-3e4a-48c9-b105-160958e7f5c5");
   // ticket_.withFields("default").getProcedure()?.getInvoice();
 
   const tickets_ = await Tickets(
