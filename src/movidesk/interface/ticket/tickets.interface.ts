@@ -6,6 +6,6 @@ export interface TicketsData {
 }
 
 export interface Tickets {
-  customFieldId: number;
-  serialNumber: string;
+  name?: number | string | number[];
+  value: string;
 }

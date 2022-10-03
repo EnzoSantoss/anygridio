@@ -3,36 +3,31 @@ import { Ticket } from "../../class/ticket/Ticket.class";
 import * as I from "../../interface/index";
 import axios from "axios";
 
-async function factory(ticket: any, token?: string) {
+function factory(ticket: any, token?: string) {
+  function ticketBuilder(value: any) {
+    return new Ticket(
+      value.id,
+      value.status,
+      value.category,
+      value.customFieldValues
+    );
+  }
+
   //Verificando se é um array de tickets  ou se é um unico tickets
   if (Array.isArray(ticket)) {
-    const ticketsArray = ticket.map(async (id) => {
-      const url = `https://api.movidesk.com/public/v1/tickets?token=${token}&id=${id}`;
-      const response = await axios.get(url);
-      const data = response.data;
-      const buildTicket = new Ticket(
-        data.id,
-        data.status,
-        data.category,
-        data.customFieldValues
-      );
+    const ticketsArray = ticket.map((value) => {
+      const buildTicket = ticketBuilder(value);
       return buildTicket;
     });
 
     return ticketsArray;
   } else {
-    const buildTicket = new Ticket(
-      ticket.id,
-      ticket.status,
-      ticket.category,
-      ticket.customFieldValues
-    );
+    const buildTicket = ticketBuilder(ticket);
     return buildTicket;
   }
 }
 
 export async function ticket(id: number, token: string) {
-  //let tkt = await buildClassTicket(id, token);
   try {
     const uri: string = `https://api.movidesk.com/public/v1/tickets`;
     const query: string = `token=${token}&id=${id}`;
@@ -45,22 +40,35 @@ export async function ticket(id: number, token: string) {
   }
 }
 
+//https://api.movidesk.com/public/v1/tickets?token=80c1fb64-3e4a-48c9-b105-160958e7f5c5&$select=id&$filter=status eq 'S4 - COLETA REVERSA'&$expand=customFieldValues($filter=customFieldId eq 116884;$select=value)
+
+// const query: string = `token=${token}&$select=id,status,category&$expand=customFieldValues($select=value,customFieldId,customFieldRuleId,line,items;$expand=items)&$filter=customFieldValues/any(c: c/value eq '${info.serialNumber}')`;
+
 export async function Tickets(info: I.Tickets, token: string) {
-  const uri: string = `https://api.movidesk.com/public/v1/tickets`;
+  try {
+    const uri: string = `https://api.movidesk.com/public/v1/tickets`;
+    const select: string = `$select=id,status,category,createdDate`;
+    const expand: string = `$expand=customFieldValues`;
+    let query: string | null = null;
 
-  //Pesquisando o ticket pelo numero de serie informado
-  const query: string = `token=${token}&$select=id,status,createdDate&$expand=customFieldValues($filter=customFieldId eq ${info.customFieldId};$select=value,customFieldId)&$filter=customFieldValues/any(c: c/value eq '${info.serialNumber}')`;
+    //Pesquisando o(s) ticket(s) de acordo com as informações solicitadas
+    if (!info.name) {
+      query = `token=${token}&$select=id,status,category,createdDate&$expand=customFieldValues($select=value,customFieldId,customFieldRuleId,line,items;$expand=items)&$filter=customFieldValues/any(c: c/value eq '${info.value}')`;
+    } else if (info.name) {
+      query = `token=${token}&$select=id,status,category&$filter=${info.name} eq '${info.value}'&$expand=customFieldValues($select=value,customFieldId,customFieldRuleId,line,items;$expand=items)&$orderby=id desc`;
+    }
 
-  const url = `${uri}?${query}`;
+    const url = `${uri}?${query}`;
 
-  const response: any = await axios.get(url);
+    const response: any = await axios.get(url);
 
-  const data: I.TicketsData[] = response.data;
+    const data: I.TicketsData[] = response.data;
 
-  //pegando o ID de todos os tickets
-  const ticketsId: number[] = data.map((tkt) => {
-    return tkt.id;
-  });
-  const teste: any = await factory(ticketsId, token);
-  return teste;
+    const buildTicket: any = factory(data);
+
+    return buildTicket;
+  } catch (e) {
+    console.log("Erro: " + e);
+    return;
+  }
 }
