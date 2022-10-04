@@ -11,19 +11,19 @@ const create = async () => {
   //const ticket_ = await Ticket(36500, "80c1fb64-3e4a-48c9-b105-160958e7f5c5");
   // ticket_.withFields("default").getProcedure()?.getInvoice();
 
-  // const tickets_ = await Tickets(
-  //   { value: "S4 - COLETA REVERSA", name: "status" },
-  //   "80c1fb64-3e4a-48c9-b105-160958e7f5c5"
-  // );
-
   const tickets_ = await Tickets(
-    { value: "DWH3BDB00C" },
+    { value: "S3.1", name: "status" },
     "80c1fb64-3e4a-48c9-b105-160958e7f5c5"
   );
 
-  const [teste] = tickets_;
+  // const tickets_ = await Tickets(
+  //   { value: "DWH3BDB00C" },
+  //   "80c1fb64-3e4a-48c9-b105-160958e7f5c5"
+  // );
 
-  //console.log(teste.withFields("default"));
+  // console.log(tickets_);
+  console.log(tickets_);
+  return tickets_;
 };
 
 create();

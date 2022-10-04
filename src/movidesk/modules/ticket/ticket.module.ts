@@ -2,8 +2,9 @@
 import { Ticket } from "../../class/ticket/Ticket.class";
 import * as I from "../../interface/index";
 import axios from "axios";
+import { arrayStatus } from "../../class/ticket/defalutFields";
 
-function factory(ticket: any, token?: string) {
+function factory(ticket: I.Ticket[] | I.Ticket, token?: string) {
   function ticketBuilder(value: any) {
     return new Ticket(
       value.id,
@@ -16,6 +17,7 @@ function factory(ticket: any, token?: string) {
   //Verificando se é um array de tickets  ou se é um unico tickets
   if (Array.isArray(ticket)) {
     const ticketsArray = ticket.map((value) => {
+      //Iniciando o processo de contrução do ticket
       const buildTicket = ticketBuilder(value);
       return buildTicket;
     });
@@ -40,35 +42,56 @@ export async function ticket(id: number, token: string) {
   }
 }
 
-//https://api.movidesk.com/public/v1/tickets?token=80c1fb64-3e4a-48c9-b105-160958e7f5c5&$select=id&$filter=status eq 'S4 - COLETA REVERSA'&$expand=customFieldValues($filter=customFieldId eq 116884;$select=value)
-
-// const query: string = `token=${token}&$select=id,status,category&$expand=customFieldValues($select=value,customFieldId,customFieldRuleId,line,items;$expand=items)&$filter=customFieldValues/any(c: c/value eq '${info.serialNumber}')`;
-
 export async function Tickets(info: I.Tickets, token: string) {
   try {
     const uri: string = `https://api.movidesk.com/public/v1/tickets`;
     const select: string = `$select=id,status,category,createdDate`;
     const expand: string = `$expand=customFieldValues`;
+    const query_Inside_Expand: string = `$select=value,customFieldId,customFieldRuleId,line,items;$expand=items`;
     let query: string | null = null;
 
     //Pesquisando o(s) ticket(s) de acordo com as informações solicitadas
     if (!info.name) {
-      query = `token=${token}&$select=id,status,category,createdDate&$expand=customFieldValues($select=value,customFieldId,customFieldRuleId,line,items;$expand=items)&$filter=customFieldValues/any(c: c/value eq '${info.value}')`;
+      //-Se o parametro "name" NÃO for passado, a função ira usar essa query para fazer a pesquisa na api do movidesk
+      //-Essa query retornara qualquer ticket que tiver um valor DENTRO customFieldValue igual ao parametro que for passado na função
+      //-Exemplo: se o parametro passado for um numero de serie igual a 'DWH3BDB00C',essa query irá retornar todos os tickets com o numero de serie igual a 'DWH3BDB00C'
+
+      query = `token=${token}&${select},createdDate&${expand}(${query_Inside_Expand})&$filter=customFieldValues/any(c: c/value eq '${info.value}')`;
     } else if (info.name) {
-      query = `token=${token}&$select=id,status,category&$filter=${info.name} eq '${info.value}'&$expand=customFieldValues($select=value,customFieldId,customFieldRuleId,line,items;$expand=items)&$orderby=id desc`;
+      //-Se o parametro "name" FOR passado, a função ira usar essa query para fazer a pesquisa na api do movidesk
+      //-Essa query retornara qualquer ticket que tiver um valor condizente com o nome passado
+      //-Exemplo: se o parametro name for igual a "status", o parametro value necessariamente precisara ser algum status existente, como por exemplo value = "S4 - COLETA REVERSA"
+
+      //Achando o status desejado no array de status
+      const [statusFiltered]: string[] = arrayStatus.filter((value) => {
+        if (value.startsWith(info.value)) {
+          return value;
+        }
+      });
+
+      console.log(statusFiltered);
+
+      query = `token=${token}&${select}&$filter=${info.name} eq '${statusFiltered}'&${expand}(${query_Inside_Expand})&$orderby=id desc`;
     }
 
+    //Montando a url que sera consumida pelo axios
     const url = `${uri}?${query}`;
 
     const response: any = await axios.get(url);
 
-    const data: I.TicketsData[] = response.data;
+    const data: I.Ticket[] = response.data;
 
-    const buildTicket: any = factory(data);
+    //Jogando os valores retornados da API para dentro da factory function
+    const buildTicket = factory(data);
 
+    //O valor retornado sera um ticket pronto, com todas as propriedades e funções da classe Ticket
     return buildTicket;
   } catch (e) {
     console.log("Erro: " + e);
     return;
   }
 }
+
+//https://api.movidesk.com/public/v1/tickets?token=80c1fb64-3e4a-48c9-b105-160958e7f5c5&$select=id&$filter=status eq 'S4 - COLETA REVERSA'&$expand=customFieldValues($filter=customFieldId eq 116884;$select=value)
+
+// const query: string = `token=${token}&$select=id,status,category&$expand=customFieldValues($select=value,customFieldId,customFieldRuleId,line,items;$expand=items)&$filter=customFieldValues/any(c: c/value eq '${info.serialNumber}')`;

@@ -50,4 +50,28 @@ const defaultFields = {
   },
 };
 
-export { defaultFields };
+const arrayStatus: string[] = [
+  "S0.1 - INFO ENVIO/COLETA (CLIENTE)",
+  "S0.2 - INFO ENVIO/COLETA (SAC)",
+  "S1.0 - SEPARAÇÃO ESTOQUE",
+  "S1.ND.0 - ND",
+  "S1.ND.1 - NF ENTRADA ND",
+  "S1.ND.1.err - ERRO NF ENTRADA",
+  "S2.1 - EMISSÃO NF DE ENTRADA",
+  "S2.2 - EMISSÃO NF DE SAIDA",
+  "S2.err.0 - NF ERRO",
+  "S3.0 - IMPRIMIR NF E EMBALAR",
+  "S3.1 - EXPEDIÇÃO",
+  "S4 - COLETA REVERSA",
+  "S5.0 - ENTRADA ESTOQUE",
+  "S5.1 - ESTOQUE - AGUARDANDO LAB",
+  "S6 - REPARO LABORATORIO",
+  "S6.LIXO.1 - DESCARTAR INVERSOR",
+  "S6.PEÇA.1 - AGUARDANDO PEÇA",
+  "S6.PEÇA.2 REQUISIÇÃO DE PEÇA",
+  "S7 - CONTROLE QUALIDADE",
+  "S8 - DESTINO FINAL - ESTOQUE",
+  "S8.1 - ARMAZENAGEM",
+];
+
+export { defaultFields, arrayStatus };

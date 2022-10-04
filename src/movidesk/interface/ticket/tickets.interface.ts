@@ -6,6 +6,6 @@ export interface TicketsData {
 }
 
 export interface Tickets {
-  name?: number | string | number[];
+  name?: string;
   value: string;
 }
