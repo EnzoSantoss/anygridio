@@ -37,6 +37,10 @@ export class Ticket {
         return this;
       }
     }
+    if (this.status.startsWith("F")) {
+      this.procedure = "fg";
+      return this;
+    }
   }
 
   public getInvoice() {

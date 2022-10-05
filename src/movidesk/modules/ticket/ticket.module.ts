@@ -64,7 +64,8 @@ export async function Tickets(info: I.Tickets, token: string) {
 
       //Achando o status desejado no array de status
       const [statusFiltered]: string[] = arrayStatus.filter((value) => {
-        if (value.startsWith(info.value)) {
+        const infoValueUpperCase = info.value.toLocaleUpperCase();
+        if (value.startsWith(infoValueUpperCase)) {
           return value;
         }
       });
@@ -78,6 +79,7 @@ export async function Tickets(info: I.Tickets, token: string) {
     const url = `${uri}?${query}`;
 
     const response: any = await axios.get(url);
+    //const response: any = await fetch(url);
 
     const data: I.Ticket[] = response.data;
 

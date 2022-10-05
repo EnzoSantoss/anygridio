@@ -12,7 +12,7 @@ const create = async () => {
   // ticket_.withFields("default").getProcedure()?.getInvoice();
 
   const tickets_ = await Tickets(
-    { value: "S3.1", name: "status" },
+    { value: "DRH6BKM07Y" },
     "80c1fb64-3e4a-48c9-b105-160958e7f5c5"
   );
 
@@ -21,8 +21,13 @@ const create = async () => {
   //   "80c1fb64-3e4a-48c9-b105-160958e7f5c5"
   // );
 
-  // console.log(tickets_);
-  console.log(tickets_);
+  const [teste]: any = tickets_;
+
+  //teste?.withFields("default").getProcedure();
+
+  console.log(teste.id);
+
+  //console.log(tickets_);
   return tickets_;
 };
 
