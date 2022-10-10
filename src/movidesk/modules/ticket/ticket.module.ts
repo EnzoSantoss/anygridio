@@ -62,9 +62,7 @@ export async function Tickets(info: I.Tickets, token: string) {
       //-Essa query retornara qualquer ticket que tiver um valor condizente com o nome passado
       //-Exemplo: se o parametro name for igual a "status", o parametro value necessariamente precisara ser algum status existente, como por exemplo value = "S4 - COLETA REVERSA"
 
-      if (info.name == "modelo de inversor") {
-        query = `token=${token}&${select},createdDate&${expand}(${query_Inside_Expand})&$filter=customFieldValues/any(c: c/value eq '${info.value}') and status eq 'S4 - COLETA REVERSA'&$orderby=id desc`;
-      } else if (info.name == "status") {
+      if (info.name == "status") {
         const [statusFiltered]: string[] = arrayStatus.filter((value) => {
           const infoValueUpperCase = info.value.toLocaleUpperCase();
           if (value.startsWith(infoValueUpperCase)) {
@@ -75,6 +73,8 @@ export async function Tickets(info: I.Tickets, token: string) {
         console.log(statusFiltered);
 
         query = `token=${token}&${select}&$filter=${info.name} eq '${statusFiltered}'&${expand}(${query_Inside_Expand})&$orderby=id desc`;
+      } else if (typeof info.name == "number") {
+        query = `token=${token}&${select},createdDate&${expand}(${query_Inside_Expand})&$filter=customFieldValues/any(c: c/value eq '${info.value}' and c/customFieldId eq ${info.name})`;
       } else {
         query = `token=${token}&${select}&$filter=${info.name} eq '${info.value}'&${expand}(${query_Inside_Expand})&$orderby=id desc`;
       }
