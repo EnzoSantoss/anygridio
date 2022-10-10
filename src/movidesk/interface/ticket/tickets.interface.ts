@@ -7,5 +7,6 @@ export interface TicketsData {
 
 export interface Tickets {
   name?: string | number;
+  id?: string | number;
   value: string;
 }

@@ -42,57 +42,65 @@ export async function ticket(id: number, token: string) {
   }
 }
 
-export async function Tickets(info: I.Tickets, token: string) {
+//Tickets Function
+export async function Tickets(info: I.Tickets[], token: string) {
   try {
-    const uri: string = `https://api.movidesk.com/public/v1/tickets`;
-    const select: string = `$select=id,status,category,createdDate`;
-    const expand: string = `$expand=customFieldValues`;
-    const query_Inside_Expand: string = `$select=value,customFieldId,customFieldRuleId,line,items;$expand=items`;
-    let query: string | null = null;
+    //Verinfando se o array que esta vindo da função só possui um item
+    if (info.length <= 1) {
+      const [infoTickets]: I.Tickets[] = info;
+      const uri: string = `https://api.movidesk.com/public/v1/tickets`;
+      const select: string = `$select=id,status,category,createdDate`;
+      const expand: string = `$expand=customFieldValues`;
+      const query_Inside_Expand: string = `$select=value,customFieldId,customFieldRuleId,line,items;$expand=items`;
+      let query: string | null = null;
 
-    //Pesquisando o(s) ticket(s) de acordo com as informações solicitadas
-    if (!info.name) {
-      //-Se o parametro "name" NÃO for passado, a função ira usar essa query para fazer a pesquisa na api do movidesk
-      //-Essa query retornara qualquer ticket que tiver um valor DENTRO customFieldValue igual ao parametro que for passado na função
-      //-Exemplo: se o parametro passado for um numero de serie igual a 'DWH3BDB00C',essa query irá retornar todos os tickets com o numero de serie igual a 'DWH3BDB00C'
+      //Pesquisando o(s) ticket(s) de acordo com as informações solicitadas
+      if (!infoTickets.name) {
+        //-Se o parametro "name" NÃO for passado, a função ira usar essa query para fazer a pesquisa na api do movidesk
+        //-Essa query retornara qualquer ticket que tiver um valor DENTRO customFieldValue igual ao parametro que for passado na função
+        //-Exemplo: se o parametro passado for um numero de serie igual a 'DWH3BDB00C',essa query irá retornar todos os tickets com o numero de serie igual a 'DWH3BDB00C'
 
-      query = `token=${token}&${select},createdDate&${expand}(${query_Inside_Expand})&$filter=customFieldValues/any(c: c/value eq '${info.value}')`;
-    } else if (info.name) {
-      //-Se o parametro "name" FOR passado, a função ira usar essa query para fazer a pesquisa na api do movidesk
-      //-Essa query retornara qualquer ticket que tiver um valor condizente com o nome passado
-      //-Exemplo: se o parametro name for igual a "status", o parametro value necessariamente precisara ser algum status existente, como por exemplo value = "S4 - COLETA REVERSA"
+        query = `token=${token}&${select},createdDate&${expand}(${query_Inside_Expand})&$filter=customFieldValues/any(c: c/value eq '${infoTickets.value}')`;
+      } else if (infoTickets.name || infoTickets.id) {
+        //-Se o parametro "name" FOR passado, a função ira usar essa query para fazer a pesquisa na api do movidesk
+        //-Essa query retornara qualquer ticket que tiver um valor condizente com o nome passado
+        //-Exemplo: se o parametro name for igual a "status", o parametro value necessariamente precisara ser algum status existente, como por exemplo value = "S4 - COLETA REVERSA"
 
-      if (info.name == "status") {
-        const [statusFiltered]: string[] = arrayStatus.filter((value) => {
-          const infoValueUpperCase = info.value.toLocaleUpperCase();
-          if (value.startsWith(infoValueUpperCase)) {
-            return value;
-          }
-        });
+        if (infoTickets.name == "status") {
+          const [statusFiltered]: string[] = arrayStatus.filter((value) => {
+            const infoValueUpperCase = infoTickets.value.toLocaleUpperCase();
+            if (value.startsWith(infoValueUpperCase)) {
+              return value;
+            }
+          });
 
-        console.log(statusFiltered);
+          console.log(statusFiltered);
 
-        query = `token=${token}&${select}&$filter=${info.name} eq '${statusFiltered}'&${expand}(${query_Inside_Expand})&$orderby=id desc`;
-      } else if (typeof info.name == "number") {
-        query = `token=${token}&${select},createdDate&${expand}(${query_Inside_Expand})&$filter=customFieldValues/any(c: c/value eq '${info.value}' and c/customFieldId eq ${info.name})`;
-      } else {
-        query = `token=${token}&${select}&$filter=${info.name} eq '${info.value}'&${expand}(${query_Inside_Expand})&$orderby=id desc`;
+          query = `token=${token}&${select}&$filter=${infoTickets.name} eq '${statusFiltered}'&${expand}(${query_Inside_Expand})&$orderby=id desc`;
+        } else if (
+          typeof infoTickets.name == "number" ||
+          typeof infoTickets.id == "number"
+        ) {
+          query = `token=${token}&${select},createdDate&${expand}(${query_Inside_Expand})&$filter=customFieldValues/any(c: c/value eq '${infoTickets.value}' and c/customFieldId eq ${infoTickets.name})&$orderby=id desc`;
+        } else {
+          query = `token=${token}&${select}&$filter=${infoTickets.name} eq '${infoTickets.value}'&${expand}(${query_Inside_Expand})&$orderby=id desc`;
+        }
       }
+
+      //Montando a url que sera consumida pelo axios
+      const url = `${uri}?${query}`;
+
+      const response: any = await axios.get(url);
+      //const response: any = await fetch(url);
+
+      const data: I.Ticket[] = response.data;
+
+      //Jogando os valores retornados da API para dentro da factory function
+      const buildTicket = factory(data);
+
+      //O valor retornado sera um ticket pronto, com todas as propriedades e funções da classe Ticket
+      return buildTicket;
     }
-
-    //Montando a url que sera consumida pelo axios
-    const url = `${uri}?${query}`;
-
-    const response: any = await axios.get(url);
-    //const response: any = await fetch(url);
-
-    const data: I.Ticket[] = response.data;
-
-    //Jogando os valores retornados da API para dentro da factory function
-    const buildTicket = factory(data);
-
-    //O valor retornado sera um ticket pronto, com todas as propriedades e funções da classe Ticket
-    return buildTicket;
   } catch (e) {
     console.log("Erro: " + e);
     return;
