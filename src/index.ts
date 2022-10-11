@@ -12,7 +12,11 @@ const create = async () => {
   // ticket_.withFields("default").getProcedure()?.getInvoice();
 
   const tickets_ = await Tickets(
-    [{ id: 92408, value: "DWH3BDB00C" }],
+    [
+      { id: 92408, value: "DWH3BDB00C" },
+      { id: 123407, value: "TESTE" },
+      { name: "status", value: "ALOALOALO" },
+    ],
     "80c1fb64-3e4a-48c9-b105-160958e7f5c5"
   );
 
