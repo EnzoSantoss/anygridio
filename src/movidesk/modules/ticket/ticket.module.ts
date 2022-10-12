@@ -125,6 +125,7 @@ export async function Tickets(
     const buildTicket = factory(data);
 
     //O valor retornado sera um ticket pronto, com todas as propriedades e funções da classe Ticket
+    //
     return buildTicket;
   } catch (e) {
     console.log("Erro: " + e);
