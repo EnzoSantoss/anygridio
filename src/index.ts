@@ -15,7 +15,7 @@ const create = async () => {
     [
       { id: 92408, value: "DWH3BDB00C" },
       { id: 123407, value: "TESTE" },
-      { name: "status", value: "ALOALOALO" },
+      { name: "status", value: "s8" },
     ],
     "80c1fb64-3e4a-48c9-b105-160958e7f5c5"
   );
