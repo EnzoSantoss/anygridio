@@ -4,32 +4,38 @@
 //export * from "./movidesk/index";
 // export * from './nfe/index';
 
-import { Ticket, Tickets } from "./movidesk/index"; // Testando as funções localmente via npm run dev
-export { Ticket, Tickets } from "./movidesk/index"; // exportando as funcionalidades do package
+//import { Ticket, Tickets } from "./movidesk/index"; // Testando as funções localmente via npm run dev
+//export { Ticket, Tickets } from "./movidesk/index"; // exportando as funcionalidades do package
+
+import { Movidesk } from "./movidesk";
+export { Movidesk } from "./movidesk";
 
 const create = async () => {
-  //const ticket_ = await Ticket(36500, "80c1fb64-3e4a-48c9-b105-160958e7f5c5");
-  // ticket_.withFields("default").getProcedure()?.getInvoice();
-
-  const tickets_ = await Tickets(
-    [
-      { id: 92408, value: "DWH3BDB00C" },
-      { id: 123407, value: "TESTE" },
-      { name: "status", value: "s8" },
-    ],
-    "80c1fb64-3e4a-48c9-b105-160958e7f5c5"
-  );
-
-  // const tickets_ = await Tickets(
-  //   { value: "DWH3BDB00C" },
+  // const ticket_ = await Movidesk.Ticket(
+  //   38261,
   //   "80c1fb64-3e4a-48c9-b105-160958e7f5c5"
   // );
 
+  // const [tkt] = ticket_;
+
+  // tkt.withFields("default")
+
+  /////////////////////////////////////////////////////////////////
+
+  const tickets_ = await Movidesk.Tickets(
+    [
+      { id: 92408, value: "DXH5BG90NY" },
+      { name: "status", value: "s8" },
+      { value: "79904354" },
+    ],
+    "80c1fb64-3e4a-48c9-b105-160958e7f5c5",
+    "and"
+  );
+
   const [teste]: any = tickets_;
 
-  //teste?.withFields("default").getProcedure();
+  console.log(teste.id);
 
-  console.log(teste);
   console.log("-------FINAL DO PROCESSO--------");
   return tickets_;
 };

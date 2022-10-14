@@ -1,11 +1,12 @@
-import { textSpanEnd } from "typescript";
-import { arrayStatus } from "../movidesk/class/ticket/defalutFields";
 import * as I from "../movidesk/interface/index";
 import { statusCheck } from "./statusCheck";
 
-export function queryBuilder(info: any[], token: string) {
+export function queryBuilder(
+  info: I.Tickets[],
+  operator: string,
+  token: string
+) {
   const [infoTickets]: I.Tickets[] = info;
-  const uri: string = `https://api.movidesk.com/public/v1/tickets`;
   const select: string = `$select=id,status,category,createdDate`;
   const expand: string = `$expand=customFieldValues`;
   const query_Inside_Expand: string = `$select=value,customFieldId,customFieldRuleId,line,items;$expand=items`;
@@ -20,22 +21,13 @@ export function queryBuilder(info: any[], token: string) {
       //-Essa query retornara qualquer ticket que tiver um valor DENTRO customFieldValue igual ao parametro que for passado na função
       //-Exemplo: se o parametro passado for um numero de serie igual a 'DWH3BDB00C',essa query irá retornar todos os tickets com o numero de serie igual a 'DWH3BDB00C'
 
-      query = `token=${token}&${select},createdDate&${expand}(${query_Inside_Expand})&$filter=customFieldValues/any(c: c/value eq '${infoTickets.value}')`;
+      query = `token=${token}&${select}&${expand}(${query_Inside_Expand})&$filter=customFieldValues/any(c: c/value eq '${infoTickets.value}')`;
     } else if (infoTickets.name || infoTickets.id) {
       //-Se o parametro "name" OU "id" FOR passado, a função ira usar esses parametros para fazer um filtro na requisição da API
       //-Essa query retornara qualquer ticket que tiver um valor condizente com o nome passado
       //-Exemplo: se o parametro name for igual a "status", o parametro value necessariamente precisara ser algum status existente, como por exemplo value = "S4 - COLETA REVERSA"
 
       if (infoTickets.name == "status") {
-        // const [statusFiltered]: string[] = arrayStatus.filter((value) => {
-        //   const infoValueUpperCase = infoTickets.value.toLocaleUpperCase();
-        //   if (value.startsWith(infoValueUpperCase)) {
-        //     return value;
-        //   }
-        // });
-
-        // console.log(statusFiltered);
-
         const statusFiltered = statusCheck(infoTickets.name, infoTickets.value);
 
         query = `token=${token}&${select}&$filter=${infoTickets.name} eq '${statusFiltered}'&${expand}(${query_Inside_Expand})&$orderby=id desc`;
@@ -43,33 +35,41 @@ export function queryBuilder(info: any[], token: string) {
         //typeof infoTickets.name == "number" ||
         typeof infoTickets.id == "number"
       ) {
-        query = `token=${token}&${select},createdDate&${expand}(${query_Inside_Expand})&$filter=customFieldValues/any(c: c/value eq '${infoTickets.value}' and c/customFieldId eq ${infoTickets.id})&$orderby=id desc`;
+        query = `token=${token}&${select}&${expand}(${query_Inside_Expand})&$filter=customFieldValues/any(c: c/value eq '${infoTickets.value}' and c/customFieldId eq ${infoTickets.id})&$orderby=id desc`;
       } else {
         query = `token=${token}&${select}&$filter=${infoTickets.name} eq '${infoTickets.value}'&${expand}(${query_Inside_Expand})&$orderby=id desc`;
       }
     }
   } else {
+    const operation = operator.toLowerCase();
     //Caso for passado mais de um item no array
     info.forEach((e, index) => {
-      //Fazendo um looping por todos os itens que foram passados e moentando um filtro
-      if (!e.name) {
+      //Fazendo um looping por todos os itens que foram passados e montando um filtro
+      if (!e.name && !e.id) {
         index == 0
-          ? (filters = `&$filter=customFieldValues/any(c: c/value eq '${e.value}'  and  c/customFieldId eq ${e.id})`)
-          : (filters += ` and customFieldValues/any(c: c/value eq '${e.value}'  and  c/customFieldId eq ${e.id})`);
-      } else {
+          ? (filters = `&$filter=customFieldValues/any(c: c/value eq '${e.value}')`)
+          : (filters += ` ${operation} customFieldValues/any(c: c/value eq '${e.value}')`);
+      } else if (e.name) {
         index == 0
           ? (filters = `&$filter=${e.name} eq '${statusCheck(
               e.name,
               e.value
             )}'`)
-          : (filters += ` and ${e.name} eq '${statusCheck(e.name, e.value)}'`);
+          : (filters += ` ${operation} ${e.name} eq '${statusCheck(
+              e.name,
+              e.value
+            )}'`);
+      } else {
+        index == 0
+          ? (filters = `&$filter=customFieldValues/any(c: c/value eq '${e.value}'  and  c/customFieldId eq ${e.id})`)
+          : (filters += ` ${operation} customFieldValues/any(c: c/value eq '${e.value}'  and  c/customFieldId eq ${e.id})`);
       }
     });
   }
 
   if (filters) {
-    query = `token=${token}&${select},createdDate&${expand}(${query_Inside_Expand})${filters}`;
+    query = `token=${token}&${select}&${expand}(${query_Inside_Expand})${filters}`;
   }
 
-  return { query, filters };
+  return { query };
 }
