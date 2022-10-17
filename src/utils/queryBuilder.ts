@@ -13,63 +13,40 @@ export function queryBuilder(
   let filters: null | string = null;
   let query: string | null = null;
 
-  //Verinfando se o array que esta vindo da função só possui um item
-  if (info.length <= 1) {
-    //Pesquisando o(s) ticket(s) de acordo com as informações solicitadas
-    if (!infoTickets.name && !infoTickets.id) {
+  const operation = operator.toLowerCase();
+  //Caso for passado mais de um item no array
+  info.forEach((e, index) => {
+    //Fazendo um looping por todos os itens que foram passados e montando um filtro
+    if (!e.name && !e.id) {
       //-Se o parametro "name" e "id" NÃO forem passados, a função ira usar essa query para fazer a pesquisa na api do movidesk
       //-Essa query retornara qualquer ticket que tiver um valor DENTRO customFieldValue igual ao parametro que for passado na função
       //-Exemplo: se o parametro passado for um numero de serie igual a 'DWH3BDB00C',essa query irá retornar todos os tickets com o numero de serie igual a 'DWH3BDB00C'
-
-      query = `token=${token}&${select}&${expand}(${query_Inside_Expand})&$filter=customFieldValues/any(c: c/value eq '${infoTickets.value}')`;
-    } else if (infoTickets.name || infoTickets.id) {
-      //-Se o parametro "name" OU "id" FOR passado, a função ira usar esses parametros para fazer um filtro na requisição da API
+      index == 0
+        ? (filters = `&$filter=customFieldValues/any(c: c/value eq '${e.value}')`)
+        : (filters += ` ${operation} customFieldValues/any(c: c/value eq '${e.value}')`);
+    } else if (e.name) {
+      //-Se o parametro "name" FOR passado, a função ira usar esse parametro para fazer um filtro na requisição da API
       //-Essa query retornara qualquer ticket que tiver um valor condizente com o nome passado
       //-Exemplo: se o parametro name for igual a "status", o parametro value necessariamente precisara ser algum status existente, como por exemplo value = "S4 - COLETA REVERSA"
-
-      if (infoTickets.name == "status") {
-        const statusFiltered = statusCheck(infoTickets.name, infoTickets.value);
-
-        query = `token=${token}&${select}&$filter=${infoTickets.name} eq '${statusFiltered}'&${expand}(${query_Inside_Expand})&$orderby=id desc`;
-      } else if (
-        //typeof infoTickets.name == "number" ||
-        typeof infoTickets.id == "number"
-      ) {
-        query = `token=${token}&${select}&${expand}(${query_Inside_Expand})&$filter=customFieldValues/any(c: c/value eq '${infoTickets.value}' and c/customFieldId eq ${infoTickets.id})&$orderby=id desc`;
-      } else {
-        query = `token=${token}&${select}&$filter=${infoTickets.name} eq '${infoTickets.value}'&${expand}(${query_Inside_Expand})&$orderby=id desc`;
-      }
+      index == 0
+        ? (filters = `&$filter=${e.name} eq '${statusCheck(e.name, e.value)}'`)
+        : (filters += ` ${operation} ${e.name} eq '${statusCheck(
+            e.name,
+            e.value
+          )}'`);
+    } else {
+      //-Por fim,caso o parametro "id" FOR passado, a função ira usar esse parametro para fazer um filtro na requisição da API
+      //-Essa query retornara qualquer ticket que tiver o "value" dentro do customFieldId desejado
+      //-Exemplo: se o parametro id for igual a "92408",e o parametro value igual a "DXH5BG90NY", ele ira pesquisar qual ticket possui esse valor nesse id em especifico
+      index == 0
+        ? (filters = `&$filter=customFieldValues/any(c: c/value eq '${e.value}'  and  c/customFieldId eq ${e.id})`)
+        : (filters += ` ${operation} customFieldValues/any(c: c/value eq '${e.value}'  and  c/customFieldId eq ${e.id})`);
     }
-  } else {
-    const operation = operator.toLowerCase();
-    //Caso for passado mais de um item no array
-    info.forEach((e, index) => {
-      //Fazendo um looping por todos os itens que foram passados e montando um filtro
-      if (!e.name && !e.id) {
-        index == 0
-          ? (filters = `&$filter=customFieldValues/any(c: c/value eq '${e.value}')`)
-          : (filters += ` ${operation} customFieldValues/any(c: c/value eq '${e.value}')`);
-      } else if (e.name) {
-        index == 0
-          ? (filters = `&$filter=${e.name} eq '${statusCheck(
-              e.name,
-              e.value
-            )}'`)
-          : (filters += ` ${operation} ${e.name} eq '${statusCheck(
-              e.name,
-              e.value
-            )}'`);
-      } else {
-        index == 0
-          ? (filters = `&$filter=customFieldValues/any(c: c/value eq '${e.value}'  and  c/customFieldId eq ${e.id})`)
-          : (filters += ` ${operation} customFieldValues/any(c: c/value eq '${e.value}'  and  c/customFieldId eq ${e.id})`);
-      }
-    });
-  }
+  });
 
   if (filters) {
-    query = `token=${token}&${select}&${expand}(${query_Inside_Expand})${filters}`;
+    query = `token=${token}&${select}&${expand}(${query_Inside_Expand})${filters}&$orderby=id desc`;
   }
 
-  return { query };
+  return query;
 }

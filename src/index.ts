@@ -11,30 +11,41 @@ import { Movidesk } from "./movidesk";
 export { Movidesk } from "./movidesk";
 
 const create = async () => {
-  // const ticket_ = await Movidesk.Ticket(
+  // const [ticket_] = await Movidesk.Ticket(
   //   38261,
   //   "80c1fb64-3e4a-48c9-b105-160958e7f5c5"
   // );
 
-  // const [tkt] = ticket_;
+  // //const [tkt] = ticket_;
 
-  // tkt.withFields("default")
+  // ticket_.withFields([
+  //   { id: 92408, value: "snDamaged" },
+  //   { id: 103454, value: "snFixedAnygrid" },
+  //   { id: 122405, value: "snFixedTha" },
+  //   { id: 116301, value: "dateIngressIntoStock" },
+  // ]);
+  // console.log(ticket_);
 
   /////////////////////////////////////////////////////////////////
 
   const tickets_ = await Movidesk.Tickets(
     [
-      { id: 92408, value: "DXH5BG90NY" },
-      { name: "status", value: "s8" },
-      { value: "79904354" },
+      { id: 92408, value: "DZH2B030BG" },
+      //{ name: "category", value: "Fora da Garantia" },
+      { name: "status", value: "s5" },
+      //{ id: 115201, value: "Growatt 3000TL-X"},
     ],
     "80c1fb64-3e4a-48c9-b105-160958e7f5c5",
-    "and"
+    "or"
   );
 
-  const [teste]: any = tickets_;
+  //const [teste]: any = tickets_;
 
-  console.log(teste.id);
+  //console.log(teste);
+
+  tickets_?.forEach((e) => {
+    console.log(e.id);
+  });
 
   console.log("-------FINAL DO PROCESSO--------");
   return tickets_;

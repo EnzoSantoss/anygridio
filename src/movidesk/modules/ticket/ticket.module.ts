@@ -29,7 +29,7 @@ export async function Tickets(
     const uri: string = `https://api.movidesk.com/public/v1/tickets`;
 
     //Construindo a query com todos os filtros Necessários
-    let { query } = queryBuilder(info, operator, token);
+    let query = queryBuilder(info, operator, token);
 
     //Montando a url que sera consumida pelo axios
     const url = `${uri}?${query}`;

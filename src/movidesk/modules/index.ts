@@ -2,4 +2,4 @@
 
 export { ticket as Ticket, Tickets } from "./ticket/ticket.module";
 
-//export Movidesk:{Ticket,Tick}  from "./ticket/ticket.module";
+//export Movidesk:{Ticket,Ticket}  from "./ticket/ticket.module";
