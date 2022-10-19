@@ -30,10 +30,11 @@ const create = async () => {
 
   const tickets_ = await Movidesk.Tickets(
     [
-      { id: 92408, value: "DZH2B030BG" },
+      //{ id: 92408, value: "DZH2B030BG" },
       //{ name: "category", value: "Fora da Garantia" },
       //{ name: "status", value: "s5" },
-      { name: "status", options: { 0: "s2", 1: "s3", 2: "s4" } },
+      //{ name: "status", options: { 0: "s2.1", 1: "s3" } },
+      { name: "data", range: { from: "10", to: "11" } },
       //{ id: 115201, value: "Growatt 3000TL-X"},
     ],
     "80c1fb64-3e4a-48c9-b105-160958e7f5c5",

@@ -1,28 +1,31 @@
 import { statusCheck } from "./statusCheck";
 import { Tickets } from "../movidesk/interface";
-export function optionsArrayValues(info: any) {
-  let arrayValues: string[] = [];
+export function optionsValues(info: any) {
+  let optionsValues: string = "";
   let name: any = null;
+  let existeOption: boolean = false;
 
   info.forEach((e: Tickets) => {
     if (e.options) {
+      existeOption = true;
       name = e?.name ?? e.id;
       let objt = e.options;
 
       //Fazendo um looping pelas propriedades do objeto
-      Object.keys(objt).forEach((e) => {
+      Object.keys(objt).forEach((e, index) => {
         const value = statusCheck(name, objt[e]);
-        arrayValues?.push(value);
+        optionsValues +=
+          index == 0
+            ? `&$filter=${name} eq '${value}'`
+            : ` or ${name} eq '${value}'`;
+        //arrayValues?.push(value);
       });
     }
   });
 
-  if (arrayValues.length == 0) {
+  if (!existeOption) {
     return false;
   } else {
-    return { name, arrayValues };
+    return optionsValues;
   }
-
-  //arrayValues.length == 0 ? return false : return
-  //? return false :return arrayValues
 }

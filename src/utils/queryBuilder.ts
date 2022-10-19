@@ -1,7 +1,8 @@
 import * as I from "../movidesk/interface/index";
 import { statusCheck } from "./statusCheck";
-import { optionsArrayValues } from "./optionsArray";
-import test from "node:test";
+import { optionsValues } from "./optionsArray";
+import { rangeValues } from "./rangeValues";
+//import test from "node:test";
 
 export function queryBuilder(
   info: I.Tickets[],
@@ -17,11 +18,12 @@ export function queryBuilder(
 
   ////////////////////////////////////////////////////////////////////
 
-  const options = optionsArrayValues(info);
+  const options = optionsValues(info);
+  const range = rangeValues(info);
 
   ////////////////////////////////////////////////////////////////////
 
-  if (!options) {
+  if (!options && !range) {
     const operation = operator.toLowerCase();
 
     info.forEach((e, index) => {
@@ -61,18 +63,19 @@ export function queryBuilder(
     }
 
     return query;
-  } else {
-    const { name, arrayValues } = options;
+  }
+  if (options) {
+    console.log(options);
+    query = `token=${token}&${select}&${expand}(${query_Inside_Expand})${options}&$orderby=id desc`;
 
-    const optionsFilter = arrayValues.join(", ");
+    return query;
+    // const { name, arrayValues } = options;
+    // const optionsFilterValues = arrayValues.join(", ");
+    // const optionsFilter = `&$filter=${name} in (${optionsFilterValues})`;
+    // console.log(optionsFilter);
+    // query = `token=${token}&${select}&${expand}(${query_Inside_Expand})${optionsFilter}&$orderby=id desc`;
+  }
 
-    console.log(optionsFilter);
-
-    query = `token=${token}&${select}&${expand}(${query_Inside_Expand})${filters}&$orderby=id desc`;
-
-    //console.log(teste)
-
-    console.log(name);
-    //console.log(arrayValues);
+  if (range) {
   }
 }

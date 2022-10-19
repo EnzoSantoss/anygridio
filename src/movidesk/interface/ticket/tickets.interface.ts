@@ -8,7 +8,7 @@ export interface TicketsData {
 export interface Tickets {
   name?: string | number;
   id?: string | number;
-  range?: string;
+  range?: { from: string; to: string };
   options?: any;
   value?: string;
 }
