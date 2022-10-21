@@ -77,5 +77,9 @@ export function queryBuilder(
   }
 
   if (range) {
+    const { name, values } = range;
+    //console.log(range);
+    query = `token=${token}&${select},${name}&${expand}(${query_Inside_Expand})${values}&$orderby=id desc`;
+    return query;
   }
 }

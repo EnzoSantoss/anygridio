@@ -2,33 +2,31 @@ import { statusCheck } from "./statusCheck";
 import { Tickets } from "../movidesk/interface";
 
 export function rangeValues(info: any) {
-  let optionsValues: string = "";
+  let values: string = "";
   let name: any = null;
-  let existeOption: boolean = false;
+  let existeRange: boolean = false;
 
-  info.forEach((e: Tickets) => {
+  info.forEach((e: Tickets, index: number) => {
     if (e.range) {
-      existeOption = true;
+      existeRange = true;
       name = e?.name ?? e.id;
-      let range = e.range;
+      //Desestruturando o objeto range
+      const { from, to } = e.range;
 
-      console.log(range);
-
-      //   //Fazendo um looping pelas propriedades do objeto
-      //   Object.keys(objt).forEach((e, index) => {
-      //     const value = statusCheck(name, objt[e]);
-      //     optionsValues +=
-      //       index == 0
-      //         ? `&$filter=${name} eq '${value}'`
-      //         : ` or ${name} eq '${value}'`;
-      //     //arrayValues?.push(value);
-      //   });
+      console.log(`Pegando Tickets de: ${from} até: ${to} `);
+      if (name !== "data") {
+        values = `&$filter=${name} ge ${from} and createdDate le ${to}`;
+      } else {
+        name = "createdDate";
+        //Filtrando APENAS pelos tickets que estão no fluxo DENTRO DE GARANTIA ou FORA DE GARANTIA
+        values = `&$filter=createdDate ge ${from} and createdDate le ${to} and startswith(status, 'S') or startswith(status, 'F') and status ne 'Fechado'`;
+      }
     }
   });
 
-  if (!existeOption) {
+  if (!existeRange) {
     return false;
   } else {
-    return optionsValues;
+    return { name, values };
   }
 }

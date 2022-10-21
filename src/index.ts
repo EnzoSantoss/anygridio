@@ -34,8 +34,8 @@ const create = async () => {
       //{ name: "category", value: "Fora da Garantia" },
       //{ name: "status", value: "s5" },
       //{ name: "status", options: { 0: "s2.1", 1: "s3" } },
-      { name: "data", range: { from: "10", to: "11" } },
-      //{ id: 115201, value: "Growatt 3000TL-X"},
+      { id: 115201, value: "Growatt 3000TL-X" },
+      { name: "data", range: { from: "2022-09-01", to: "2022-10-01" } },
     ],
     "80c1fb64-3e4a-48c9-b105-160958e7f5c5",
     "or"
@@ -44,10 +44,14 @@ const create = async () => {
   //const [teste]: any = tickets_;
 
   //console.log(teste);
+  let count = 0;
 
   tickets_?.forEach((e) => {
-    console.log(e.id);
+    //console.log(e.id);
+    count += 1;
   });
+
+  console.log(count);
 
   console.log("-------FINAL DO PROCESSO--------");
   return tickets_;
