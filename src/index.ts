@@ -34,11 +34,18 @@ const create = async () => {
       //{ name: "category", value: "Fora da Garantia" },
       //{ name: "status", value: "s5" },
       //{ name: "status", options: { 0: "s2.1", 1: "s3" } },
-      { id: 115201, value: "Growatt 3000TL-X" },
-      { name: "data", range: { from: "2022-09-01", to: "2022-10-01" } },
+      // {
+      //   name: "data",
+      //   range: {
+      //     from: "2022-10-25",
+      //     to: "2022-10-26",
+      //   },
+      // },
+      { name: "status", value: "s5" },
+      //{ id: 115201, value: "Growatt 3000TL-X" },
     ],
     "80c1fb64-3e4a-48c9-b105-160958e7f5c5",
-    "or"
+    "and"
   );
 
   //const [teste]: any = tickets_;

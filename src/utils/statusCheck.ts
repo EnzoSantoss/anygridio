@@ -1,4 +1,5 @@
 import { arrayStatus } from "../movidesk/class/ticket/defalutFields";
+import { rangeValues } from "./rangeValues";
 
 export function statusCheck(infoName: any, infoValue: any) {
   if (infoName === "status") {
