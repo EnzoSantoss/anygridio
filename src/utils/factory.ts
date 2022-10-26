@@ -7,7 +7,8 @@ export function factory(ticket: I.Ticket[] | I.Ticket, token?: string) {
       value.id,
       value.status,
       value.category,
-      value.customFieldValues
+      value.customFieldValues,
+      value.clients
     );
   }
 

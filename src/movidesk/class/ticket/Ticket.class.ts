@@ -7,6 +7,7 @@ export class Ticket {
     public readonly status: I.Ticket["status"],
     public readonly category: I.Ticket["category"],
     public readonly customFieldValues: I.Ticket["customFieldValues"],
+    public readonly clients: I.Ticket["clients"],
     public fields: I.Fields = {},
     public procedure: string | null = null
   ) {}
