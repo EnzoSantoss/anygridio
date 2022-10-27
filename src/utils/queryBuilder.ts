@@ -10,8 +10,8 @@ export function queryBuilder(
   token: string
 ) {
   //const [infoTickets]: I.Tickets[] = info;
-  const select: string = `$select=id,status,category,createdDate`;
-  const expand: string = `$expand=clients,customFieldValues`;
+  const select: string = `$select=id,status,owner,urgency,serviceFirstLevel,category,createdDate`;
+  const expand: string = `$expand=clients,owner,customFieldValues`;
   const query_Inside_Expand: string = `$select=value,customFieldId,customFieldRuleId,line,items;$expand=items`;
   let filters: any = null;
   let query: string | null = null;

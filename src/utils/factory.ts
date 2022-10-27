@@ -8,7 +8,11 @@ export function factory(ticket: I.Ticket[] | I.Ticket, token?: string) {
       value.status,
       value.category,
       value.customFieldValues,
-      value.clients
+      value.clients,
+      value.createdDate,
+      value?.urgency,
+      value?.owner,
+      value?.serviceFirstLevel
     );
   }
 

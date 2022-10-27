@@ -8,6 +8,10 @@ export class Ticket {
     public readonly category: I.Ticket["category"],
     public readonly customFieldValues: I.Ticket["customFieldValues"],
     public readonly clients: I.Ticket["clients"],
+    public readonly createdDate: I.Ticket["createdDate"],
+    public readonly urgency: I.Ticket["urgency"],
+    public readonly owner: I.Ticket["owner"],
+    public readonly serviceFirstLevel: I.Ticket["serviceFirstLevel"],
     public fields: I.Fields = {},
     public procedure: string | null = null
   ) {}
