@@ -13,15 +13,20 @@ export function rangeValues(info: any) {
       //Desestruturando o objeto range
       const { from, to } = e.range;
 
-      console.log(`Pegando Tickets de: ${from} até: ${to} `);
+      //console.log(`Pegando Tickets de: ${from} até: ${to} `);
       if (name !== "data") {
         //console.log("outro filtro alem de data");
       } else {
         name = "createdDate";
         //Filtrando APENAS pelos tickets que estão no fluxo DENTRO DE GARANTIA ou FORA DE GARANTIA
+        // index == 0
+        //   ? (filters = `&$filter=createdDate ge ${from} and createdDate le ${to} and startswith(status, 'S' ) or createdDate ge ${from} and createdDate le ${to} and startswith(status, 'F' )`)
+        //   : (filters += ` createdDate ge ${from} and createdDate le ${to} and startswith(status, 'S' ) or createdDate ge ${from} and createdDate le ${to} and startswith(status, 'F' )`);
+
+        //Filtrando TODOS os tickets
         index == 0
-          ? (filters = `&$filter=createdDate ge ${from} and createdDate le ${to} and startswith(status, 'S' ) or createdDate ge ${from} and createdDate le ${to} and startswith(status, 'F' )`)
-          : (filters += ` createdDate ge ${from} and createdDate le ${to} and startswith(status, 'S' ) or createdDate ge ${from} and createdDate le ${to} and startswith(status, 'F' )`);
+          ? (filters = `&$filter=createdDate ge ${from} and createdDate le ${to} `)
+          : (filters += ` createdDate ge ${from} and createdDate le ${to}`);
       }
     }
   });

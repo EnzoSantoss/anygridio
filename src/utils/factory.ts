@@ -12,7 +12,8 @@ export function factory(ticket: I.Ticket[] | I.Ticket, token?: string) {
       value.createdDate,
       value?.urgency,
       value?.owner,
-      value?.serviceFirstLevel
+      value?.serviceFirstLevel,
+      value?.justification
     );
   }
 

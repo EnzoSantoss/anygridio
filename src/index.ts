@@ -37,7 +37,7 @@ const create = async () => {
       {
         name: "data",
         range: {
-          from: "2022-10-10",
+          from: "2022-10-01",
           to: "2022-10-26",
         },
       },

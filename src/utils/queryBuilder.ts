@@ -3,20 +3,23 @@ import { statusCheck } from "./statusCheck";
 import { optionsValues } from "./optionsArray";
 import { rangeValues } from "./rangeValues";
 //import test from "node:test";
+let skipAmount: any;
 
 export function queryBuilder(
   info: I.Tickets[],
   operator: string,
-  token: string
+  token: string,
+  skip?: boolean
 ) {
   //const [infoTickets]: I.Tickets[] = info;
-  const select: string = `$select=id,status,owner,urgency,serviceFirstLevel,category,createdDate`;
+  const select: string = `$select=id,status,owner,urgency,justification,serviceFirstLevel,category,createdDate`;
   const expand: string = `$expand=clients,owner,customFieldValues`;
   const query_Inside_Expand: string = `$select=value,customFieldId,customFieldRuleId,line,items;$expand=items`;
   let filters: any = null;
   let query: string | null = null;
   let existRange: boolean = false;
   let onceInRange: boolean = false;
+  //let skipAmount: any;
 
   ////////////////////////////////////////////////////////////////////
 
@@ -73,25 +76,25 @@ export function queryBuilder(
     query = `token=${token}&${select}&${expand}(${query_Inside_Expand})${filters}&$orderby=id desc`;
   }
 
+  if (skip) {
+    //Verificando se a opção skip foi passada e quantos tickets vão precisar ser skipados
+    skipAmount == null
+      ? ((query = `token=${token}&${select}&${expand}(${query_Inside_Expand})${filters}&$orderby=id desc&$skip=1000`),
+        (skipAmount = 2))
+      : (query = `token=${token}&${select}&${expand}(${query_Inside_Expand})${filters}&$orderby=id desc&$skip=${skipAmount}000`);
+
+    skipAmount = skipAmount + 1 - 1;
+
+    return query;
+  }
+
   // }
   if (options) {
     console.log(options);
     query = `token=${token}&${select}&${expand}(${query_Inside_Expand})${options}&$orderby=id desc`;
 
     return query;
-    // const { name, arrayValues } = options;
-    // const optionsFilterValues = arrayValues.join(", ");
-    // const optionsFilter = `&$filter=${name} in (${optionsFilterValues})`;
-    // console.log(optionsFilter);
-    // query = `token=${token}&${select}&${expand}(${query_Inside_Expand})${optionsFilter}&$orderby=id desc`;
   }
-
-  // if (range) {
-  //   const { name, values } = range;
-  //   //console.log(range);
-  //   query = `token=${token}&${select},${name}&${expand}(${query_Inside_Expand})${values}&$orderby=id desc`;
-  //   return query;
-  // }
 
   return query;
 }
