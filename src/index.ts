@@ -39,6 +39,7 @@ const create = async () => {
         range: {
           from: "2022-10-01",
           to: "2022-10-26",
+          anygridOnly: false,
         },
       },
       //{ name: "status", value: "s5" },
