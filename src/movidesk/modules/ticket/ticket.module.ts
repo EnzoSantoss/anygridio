@@ -20,17 +20,37 @@ export async function ticket(id: number, token: string) {
 }
 
 //Tickets Function
+
+type extraInfo = {
+  operator?: string;
+  anygridOnly?: boolean;
+};
+
 export async function Tickets(
   info: I.Tickets[],
   token: string,
-  operator: string = "AND"
+  //operator: string = "AND",
+  extraInfo?: extraInfo
 ) {
   try {
     let allTickets: any = [];
     const uri: string = `https://api.movidesk.com/public/v1/tickets`;
+    let operator;
+    let anygridOnly;
+
+    if (!extraInfo?.operator) {
+      operator = "AND";
+    } else {
+      operator = extraInfo.operator;
+    }
+    if (!extraInfo?.anygridOnly) {
+      anygridOnly = false;
+    } else {
+      anygridOnly = extraInfo.anygridOnly;
+    }
 
     //Construindo a query com todos os filtros Necessários
-    let query = queryBuilder(info, operator, token);
+    let query = queryBuilder(info, operator, token, anygridOnly);
 
     //Montando a url que sera consumida pelo axios
     let url = `${uri}?${query}`;
@@ -46,7 +66,7 @@ export async function Tickets(
     //Verificando se tiveram mais de 1000 tickets retornados
     if (data.length >= 1000) {
       while (data.length >= 1000) {
-        query = queryBuilder(info, operator, token, true);
+        query = queryBuilder(info, operator, token, anygridOnly, true);
 
         //Montando a url que sera consumida pelo axios
         url = `${uri}?${query}`;

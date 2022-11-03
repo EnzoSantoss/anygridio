@@ -38,15 +38,16 @@ const create = async () => {
         name: "data",
         range: {
           from: "2022-10-01",
-          to: "2022-10-26",
-          anygridOnly: false,
+          to: "2022-10-07",
         },
       },
       //{ name: "status", value: "s5" },
       //{ id: 115201, value: "Growatt 3000TL-X" },
     ],
     "80c1fb64-3e4a-48c9-b105-160958e7f5c5",
-    "and"
+    { anygridOnly: true }
+    // true,
+    // "and"
   );
 
   //const [teste]: any = tickets_;

@@ -1,7 +1,7 @@
 import { statusCheck } from "./statusCheck";
 import { Tickets } from "../movidesk/interface";
 
-export function rangeValues(info: any) {
+export function rangeValues(info: any, anygridOnly: boolean) {
   let filters: string = "";
   let name: any = null;
   let existRange: boolean = false;
@@ -11,7 +11,7 @@ export function rangeValues(info: any) {
       existRange = true;
       name = e?.name ?? e.id;
       //Desestruturando o objeto range
-      const { from, to, anygridOnly } = e.range;
+      const { from, to } = e.range;
 
       //console.log(`Pegando Tickets de: ${from} até: ${to} `);
       if (name !== "data") {

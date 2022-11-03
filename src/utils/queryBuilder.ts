@@ -9,6 +9,7 @@ export function queryBuilder(
   info: I.Tickets[],
   operator: string,
   token: string,
+  anygridOnly: boolean,
   skip?: boolean
 ) {
   //const [infoTickets]: I.Tickets[] = info;
@@ -24,7 +25,7 @@ export function queryBuilder(
   ////////////////////////////////////////////////////////////////////
 
   let options; // optionsValues(info);
-  existRange = rangeValues(info).existRange;
+  existRange = rangeValues(info, anygridOnly).existRange;
 
   ////////////////////////////////////////////////////////////////////
 
@@ -45,7 +46,7 @@ export function queryBuilder(
       //-Essa query retornara qualquer ticket que tiver um valor condizente com o nome passado
       //-Exemplo: se o parametro name for igual a "status", o parametro value necessariamente precisara ser algum status existente, como por exemplo value = "S4 - COLETA REVERSA"
       if (existRange && !onceInRange) {
-        let values = rangeValues(info);
+        let values = rangeValues(info, anygridOnly);
 
         filters = values.filters;
         onceInRange = true;

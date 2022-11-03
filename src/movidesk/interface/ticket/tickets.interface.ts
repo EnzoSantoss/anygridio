@@ -16,5 +16,4 @@ export interface Tickets {
 type range = {
   from: string;
   to: string;
-  anygridOnly: boolean;
 };
