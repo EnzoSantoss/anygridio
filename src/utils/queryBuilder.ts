@@ -13,7 +13,7 @@ export function queryBuilder(
   skip?: boolean
 ) {
   //const [infoTickets]: I.Tickets[] = info;
-  const select: string = `$select=id,status,owner,urgency,justification,serviceFirstLevel,category,createdDate`;
+  const select: string = `$select=id,status,owner,tags,urgency,justification,serviceFirstLevel,category,createdDate`;
   const expand: string = `$expand=clients,owner,customFieldValues`;
   const query_Inside_Expand: string = `$select=value,customFieldId,customFieldRuleId,line,items;$expand=items`;
   let filters: any = null;

@@ -13,6 +13,7 @@ export class Ticket {
     public readonly owner: I.Ticket["owner"],
     public readonly serviceFirstLevel: I.Ticket["serviceFirstLevel"],
     public readonly justification: I.Ticket["justification"],
+    public readonly tags: I.Ticket["tags"],
     public fields: I.Fields = {},
     public procedure: string | null = null
   ) {}

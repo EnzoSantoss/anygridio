@@ -45,7 +45,7 @@ const create = async () => {
       //{ id: 115201, value: "Growatt 3000TL-X" },
     ],
     "80c1fb64-3e4a-48c9-b105-160958e7f5c5",
-    { anygridOnly: true }
+    { anygridOnly: false }
     // true,
     // "and"
   );
