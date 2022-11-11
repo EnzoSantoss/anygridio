@@ -38,6 +38,28 @@ const defaultFields = {
       { id: 107852, value: "deliveryState" }, // PF e PJ (Caso endereço de entrega difere endereço NF)
       { id: 108037, value: "deliveryNumber" }, // PF e PJ (Caso endereço de entrega difere endereço NF)
       { id: 108202, value: "deliveryComplement" }, // PF e PJ (Caso endereço de entrega difere endereço NF)]
+      //Modelos de invesores
+      { id: 94154, value: "ARK" },
+      { id: 94189, value: "GROHOME" },
+      { id: 94184, value: "HOPE" },
+      { id: 92894, value: "MAC" },
+      { id: 93642, value: "MAX" },
+      { id: 93713, value: "MIC" },
+      { id: 93662, value: "MID" },
+      { id: 93643, value: "MIN" },
+      { id: 94155, value: "MOD" },
+      { id: 93716, value: "Monitoramento" },
+      { id: 93727, value: "MTLP_S" },
+      { id: 93725, value: "MTL_S" },
+      { id: 94188, value: "Outras_baterias" },
+      { id: 93722, value: "S" },
+      { id: 94178, value: "SC" },
+      { id: 94156, value: "SPA" },
+      { id: 94157, value: "SPF" },
+      { id: 93712, value: "SPH" },
+      { id: 94177, value: "SPI" },
+      { id: 93732, value: "TL3_S" },
+      { id: 93895, value: "Acessórios" },
     ],
     buyerTypeFields: {
       CPF: [{ id: 102776, value: "buyerName" }],
@@ -100,4 +122,28 @@ const arrayStatus: string[] = [
   "F8 - RESOLUÇÃO",
 ];
 
-export { defaultFields, arrayStatus };
+const inverterArray = [
+  "ARK",
+  "GROHOME",
+  "HOPE",
+  "MAC",
+  "MAX",
+  "MIC",
+  "MID",
+  "MIN",
+  "MOD",
+  "Monitoramento",
+  "MTLP_S",
+  "MTL_S",
+  "Outras_baterias",
+  "S",
+  "SC",
+  "SPA",
+  "SPF",
+  "SPH",
+  "SPI",
+  "TL3_S",
+  "Acessórios",
+];
+
+export { defaultFields, arrayStatus, inverterArray };

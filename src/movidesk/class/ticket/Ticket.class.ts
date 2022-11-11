@@ -1,5 +1,6 @@
 import * as I from "../../interface/index";
 import { defaultFields } from "./defalutFields";
+import { inverterArray } from "./defalutFields";
 
 export class Ticket {
   constructor(
@@ -18,11 +19,12 @@ export class Ticket {
     public procedure: string | null = null
   ) {}
 
-  public withFields(fieldsToFind: I.FieldsToFind[] | string) {
-    if (fieldsToFind === "default") {
+  public withFields(fieldsToFind?: I.FieldsToFind[] | string) {
+    if (fieldsToFind === "default" || fieldsToFind === undefined) {
       //console.log(defaultFields.createInvoice.defaultFields);
-
-      return this.match(defaultFields.createInvoice.defaultFields);
+      this.match(defaultFields.createInvoice.defaultFields);
+      //console.log(this.fields);
+      return this.iversorList(inverterArray);
     }
     if (fieldsToFind === "CPF") {
       return this.match(defaultFields.createInvoice.buyerTypeFields.CPF);
@@ -95,6 +97,20 @@ export class Ticket {
       };
     }
     return invoice;
+  }
+
+  private iversorList(inversorArr: any) {
+    inversorArr.forEach((e: any) => {
+      if (this.fields[e]) {
+        // console.log(this.fields[e]);
+        this.fields = { ...this.fields, ...{ modelInverter: this.fields[e] } };
+        this.fields = { ...this.fields, ...{ familyInverter: e } };
+        delete this.fields[e];
+      }
+    });
+
+    return this.fields;
+    //this.fields
   }
 
   private match(fieldsToFind: any) {
